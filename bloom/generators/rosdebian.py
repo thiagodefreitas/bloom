@@ -46,6 +46,7 @@ from bloom.logging import info
 
 from bloom.util import get_distro_list_prompt
 
+import os
 
 class RosDebianGenerator(DebianGenerator):
     title = 'rosdebian'
@@ -110,6 +111,12 @@ class RosDebianGenerator(DebianGenerator):
 
 
 def rosify_package_name(name, rosdistro):
+    lonadistro = os.environ.get('LONA_DISTRO', 'albatross')
+    sncn_strs = ["lona", "somanet"]
+    sncn_prefix = 'lona-{0}-'.format(lonadistro)
+    if any(s in name for s in sncn_strs):
+        return sncn_prefix+name.replace('lona-','')
+
     return 'ros-{0}-{1}'.format(rosdistro, name)
 
 
